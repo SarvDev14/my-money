@@ -34,6 +34,7 @@ dependencies:
   hive_flutter: 
   provider:
   intl:
+  google_nav_bar: 
 
 
   # The following adds the Cupertino Icons font to your application.

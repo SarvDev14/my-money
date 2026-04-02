@@ -9,6 +9,66 @@ class TransactionProvider extends ChangeNotifier{
 
   List<TransactionModel> get transactions => _transactions;
 
+  double getThisWeekExpense() {
+    final now = DateTime.now();
+    final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
+
+    return _transactions
+        .where((tx) =>
+            tx.type == 'expense' && tx.date.isAfter(startOfWeek))
+        .fold(0, (sum, tx) => sum + tx.amount);
+  }
+
+  double getLastWeekExpense() {
+    final now = DateTime.now();
+    final startOfThisWeek = now.subtract(Duration(days: now.weekday - 1));
+    final startOfLastWeek = startOfThisWeek.subtract(Duration(days: 7));
+
+    return _transactions
+        .where((tx) =>
+            tx.type == 'expense' &&
+            tx.date.isAfter(startOfLastWeek) &&
+            tx.date.isBefore(startOfThisWeek))
+        .fold(0, (sum, tx) => sum + tx.amount);
+  }
+
+  double getThisWeekIncome() {
+    final now = DateTime.now();
+    final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
+
+    return _transactions
+        .where((tx) =>
+            tx.type == 'income' && tx.date.isAfter(startOfWeek))
+        .fold(0, (sum, tx) => sum + tx.amount);
+  }
+
+  double getLastWeekIncome() {
+    final now = DateTime.now();
+    final startOfThisWeek = now.subtract(Duration(days: now.weekday - 1));
+    final startOfLastWeek = startOfThisWeek.subtract(Duration(days: 7));
+
+    return _transactions
+        .where((tx) =>
+            tx.type == 'income' &&
+            tx.date.isAfter(startOfLastWeek) &&
+            tx.date.isBefore(startOfThisWeek))
+        .fold(0, (sum, tx) => sum + tx.amount);
+  }
+
+  // getting categories
+  Map<String, double> getCategoryTotals() {
+    Map<String, double> data = {};
+
+    for (var tx in _transactions) {
+      if (tx.type == 'expense') {
+        data[tx.category] =
+            (data[tx.category] ?? 0) + tx.amount;
+      }
+    }
+
+    return data;
+  }
+
   void loadTransactions(){
     _transactions = _service.getTransactions();
     notifyListeners(); 

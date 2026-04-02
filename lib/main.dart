@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:my_money/home_screen.dart';
+import 'package:my_money/screens/home_screen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:my_money/providers/transaction_provider.dart';
+import 'package:my_money/screens/main_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() async{
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
       ],
 
       child: MaterialApp(
-      home: HomeScreen(),
+      home: MainScreen(),
       debugShowCheckedModeBanner: false,
     )
     
