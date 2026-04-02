@@ -31,13 +31,13 @@ class _InsightsScreenState extends State<InsightsScreen> {
     String insightMessage = "";
 
     if (lastWeek == 0 && thisWeek > 0) {
-      insightMessage = "You started spending this week 💸";
+      insightMessage = "You started spending this week";
     } else if (percentChange > 20) {
       insightMessage = "Spending increased significantly ⚠️";
     } else if (percentChange < -20) {
-      insightMessage = "Great job! You reduced spending 💰";
+      insightMessage = "Great job! You reduced spending";
     } else {
-      insightMessage = "Spending is stable 👍";
+      insightMessage = "Spending is stable";
     }
 
     double percentChangeInInc = 0;
@@ -59,7 +59,7 @@ class _InsightsScreenState extends State<InsightsScreen> {
                     OverallInsight(insightMessage: insightMessage),
 
                     const SizedBox(height: 20,),
-                    
+
                     Row(children: [
                       Expanded(child: InsightsCard(title: "This Week Spending", subtitle: "₹${thisWeek.toStringAsFixed(0)}")),
                       SizedBox(width: 10,),

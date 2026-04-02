@@ -11,7 +11,7 @@ class OverallInsight extends StatelessWidget {
       padding: EdgeInsets.all(16),
       margin: EdgeInsets.only(top: 12),
       decoration: BoxDecoration(
-        color: Colors.black,
+        color: Colors.blue.shade500,
         borderRadius: BorderRadius.circular(15),
       ),
       child: Row(
@@ -21,7 +21,7 @@ class OverallInsight extends StatelessWidget {
           Expanded(
             child: Text(
               insightMessage,
-              style: TextStyle(color: Colors.white, fontSize: 14),
+              style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
             ),
           ),
         ],
