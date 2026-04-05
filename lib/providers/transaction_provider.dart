@@ -69,6 +69,24 @@ class TransactionProvider extends ChangeNotifier{
     return data;
   }
 
+  List<double> getWeeklyExpenses() {
+    final now = DateTime.now();
+    final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
+
+    List<double> weekly = List.filled(7, 0);
+
+    for (var tx in _transactions) {
+      if (tx.type == 'expense') {
+        if (tx.date.isAfter(startOfWeek)) {
+          int index = tx.date.weekday - 1; // Mon=0 ... Sun=6
+          weekly[index] += tx.amount;
+        }
+      }
+    }
+
+    return weekly;
+  }
+
   void loadTransactions(){
     _transactions = _service.getTransactions();
     notifyListeners(); 

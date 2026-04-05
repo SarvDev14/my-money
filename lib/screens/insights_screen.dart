@@ -3,6 +3,7 @@ import 'package:my_money/providers/transaction_provider.dart';
 import 'package:my_money/widgets/insights_card.dart';
 import 'package:my_money/widgets/other_insights.dart';
 import 'package:my_money/widgets/overall_insight.dart';
+import 'package:my_money/widgets/pie_chart_widget.dart';
 import 'package:provider/provider.dart';
 
 class InsightsScreen extends StatefulWidget {
@@ -29,6 +30,7 @@ class _InsightsScreenState extends State<InsightsScreen> {
     }
 
     String insightMessage = "";
+    
 
     if (lastWeek == 0 && thisWeek > 0) {
       insightMessage = "You started spending this week";
@@ -44,6 +46,49 @@ class _InsightsScreenState extends State<InsightsScreen> {
     if (lastWeekInc != 0) {
       percentChangeInInc = ((thisWkInc - lastWeekInc) / lastWeekInc) * 100;
     }
+
+    
+
+    final categoryData = provider.getCategoryTotals();
+    if (categoryData.isEmpty) {
+      return Text("No data to show 📊");
+    }
+
+
+    List<String> getTopCategory(Map<String, double> data) {
+      if (data.isEmpty) return ["N/A"];
+
+      String topCategory = "";
+      double maxAmount = 0;
+
+      data.forEach((category, amount) {
+        if (amount > maxAmount) {
+          maxAmount = amount;
+          topCategory = category;
+        }
+      });
+
+      return [topCategory, "${maxAmount}"];
+    }
+
+
+    final topCategory = getTopCategory(categoryData);
+
+    Color getColorForCategory(String category) {
+      switch (category) {
+        case 'Food':
+          return Colors.red;
+        case 'Shopping':
+          return Colors.green;
+        case 'Travel':
+          return Colors.blue;
+        case 'Bills':
+          return Colors.orange;
+        default:
+          return Colors.grey;
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(title: Text("Insights", style: TextStyle(fontWeight: FontWeight.bold),)),
       body: SingleChildScrollView(
@@ -80,6 +125,71 @@ class _InsightsScreenState extends State<InsightsScreen> {
                     ],
                     ),
                     
+                    SizedBox(height: 20,),
+                    
+
+                   Container(
+                      padding: EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+
+                          Text(
+                            "Top spending: ${topCategory[0]} (₹ ${topCategory[1]})",
+                           style: TextStyle(fontWeight: FontWeight.bold),),
+
+                          SizedBox(height: 10),
+
+                          Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(20.0),
+                                child: SizedBox(
+                                  height: 100,
+                                  width: 100,
+                                  child: PieChartWidget(data: categoryData),
+                                ),
+                              ),
+
+                              SizedBox(width: 15),
+
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: categoryData.entries.map((entry) {
+                                    final color = getColorForCategory(entry.key);
+
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 4),
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            width: 10,
+                                            height: 10,
+                                            decoration: BoxDecoration(
+                                              color: color,
+                                              shape: BoxShape.circle,
+                                            ),
+                                          ),
+                                          SizedBox(width: 6),
+                                          Text("${entry.key} (₹${entry.value.toStringAsFixed(0)})",style: TextStyle(fontWeight: FontWeight.bold),),
+                                        ],
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    
+
                     SizedBox(height: 20,),
         
                     OtherInsights(title: 'Change in Spendings from last week', subt: "${percentChange.toStringAsFixed(0)}%", isExp: true,),
