@@ -3,16 +3,18 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 
 class BottomNavBar extends StatelessWidget {
   final void Function(int)? onItemTapped;
-  const BottomNavBar({super.key, required this.onItemTapped});
+  final int selectedIndex;
+  const BottomNavBar({super.key, required this.onItemTapped, required this.selectedIndex});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.all(15.0),
+        padding: const EdgeInsets.all(5.0),
         
         child: ClipRRect(
           borderRadius: BorderRadius.circular(30),
           child: GNav(
+            selectedIndex: selectedIndex,
             onTabChange: onItemTapped,
             backgroundColor: Colors.black,
             color: Colors.white,

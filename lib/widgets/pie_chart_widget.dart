@@ -3,8 +3,9 @@ import 'package:fl_chart/fl_chart.dart';
 
 class PieChartWidget extends StatelessWidget {
   final Map<String, double> data;
+  final Color Function(String) getColor;
 
-  const PieChartWidget({super.key, required this.data});
+  const PieChartWidget({super.key, required this.data, required this.getColor});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,7 @@ class PieChartWidget extends StatelessWidget {
 
     final sections = data.entries.map((entry) {
       final section = PieChartSectionData(
-        color: colors[i % colors.length],
+        color: getColor(entry.key),
         value: entry.value,
         title: "",
         radius: 40,

@@ -14,7 +14,7 @@ class OtherInsights extends StatelessWidget {
       height: 80,
       width: 300,
       decoration: BoxDecoration(
-        color: isExp? Colors.red.shade300 : Colors.red.shade400,
+        color: isExp? const Color.fromARGB(255, 255, 165, 165) : const Color.fromARGB(255, 192, 255, 176),
         borderRadius: BorderRadius.circular(15),
       ),
       child: Padding(

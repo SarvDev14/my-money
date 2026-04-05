@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:my_money/providers/transaction_provider.dart';
+import 'package:my_money/screens/main_screen.dart';
+import 'package:my_money/screens/transactions_screen.dart';
 import 'package:my_money/widgets/add_transaction_sheet.dart';
 import 'package:my_money/widgets/balance_card.dart';
 import 'package:my_money/widgets/bar_chart_widget.dart';
@@ -89,6 +91,21 @@ class _HomeScreenState extends State<HomeScreen> {
                 trailing: Icon(Icons.trending_up, color: Colors.white,),
               ),
             ),
+
+            recentTx.length == 0 ? Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("No Transactions Created, ", style: TextStyle(fontWeight: FontWeight.bold),),
+                  GestureDetector(onTap:(){
+                      MainScreen.navigateToTab(context, 2);
+                    } , 
+                    child: Text("Tap Here", style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),),),
+                  
+                ]
+                ),
+            ):
         
             ListView.builder(
               shrinkWrap: true, 
@@ -98,20 +115,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 final tx = recentTx[index];
                 return TransactionTile(tx: tx, index: index);
               },
-            )
+            ),
+
+
+             SizedBox(height: 120,),
           ],
         ),
             ),
       ),
 
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.blue.shade100,
-          foregroundColor: Colors.black,
-          onPressed: (){
-            showModalBottomSheet(context: context, builder: (_)=> AddTransactionSheet());
-          }, 
-          child: Icon(Icons.add),
-        ),
+        
     );
   }
 }

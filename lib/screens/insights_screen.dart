@@ -51,7 +51,7 @@ class _InsightsScreenState extends State<InsightsScreen> {
 
     final categoryData = provider.getCategoryTotals();
     if (categoryData.isEmpty) {
-      return Text("No data to show 📊");
+      return Center(child: Text("Please Create Transactions"));
     }
 
 
@@ -151,7 +151,7 @@ class _InsightsScreenState extends State<InsightsScreen> {
                                 child: SizedBox(
                                   height: 100,
                                   width: 100,
-                                  child: PieChartWidget(data: categoryData),
+                                  child: PieChartWidget(data: categoryData,getColor: getColorForCategory,),
                                 ),
                               ),
 
@@ -191,14 +191,27 @@ class _InsightsScreenState extends State<InsightsScreen> {
                     
 
                     SizedBox(height: 20,),
-        
-                    OtherInsights(title: 'Change in Spendings from last week', subt: "${percentChange.toStringAsFixed(0)}%", isExp: true,),
-        
-                    SizedBox(height: 20,),
-        
-                    OtherInsights(title: 'Change in Income from last week', subt: "${percentChange.toStringAsFixed(0)}%", isExp: false,),
 
-                    SizedBox(height: 20,),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            OtherInsights(title: 'Change in Spendings from last week', subt: "${percentChange.toStringAsFixed(0)}%", isExp: true,),
+                          ],
+                        ),
+        
+                        SizedBox(height: 20,),
+            
+                        OtherInsights(title: 'Change in Income from last week', subt: "${percentChangeInInc.toStringAsFixed(0)}%", isExp: false,),
+                      ],
+                    ),
+
+                    
+
+                    SizedBox(height: 60,),
 
                     
 

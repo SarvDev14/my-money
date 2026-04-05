@@ -11,7 +11,7 @@ class TransactionProvider extends ChangeNotifier{
 
   double getThisWeekExpense() {
     final now = DateTime.now();
-    final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
+    final startOfWeek = _startOfWeek(now);
 
     return _transactions
         .where((tx) =>
@@ -21,7 +21,7 @@ class TransactionProvider extends ChangeNotifier{
 
   double getLastWeekExpense() {
     final now = DateTime.now();
-    final startOfThisWeek = now.subtract(Duration(days: now.weekday - 1));
+    final startOfThisWeek = _startOfWeek(now);
     final startOfLastWeek = startOfThisWeek.subtract(Duration(days: 7));
 
     return _transactions
@@ -34,7 +34,7 @@ class TransactionProvider extends ChangeNotifier{
 
   double getThisWeekIncome() {
     final now = DateTime.now();
-    final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
+    final startOfWeek = _startOfWeek(now);
 
     return _transactions
         .where((tx) =>
@@ -44,7 +44,7 @@ class TransactionProvider extends ChangeNotifier{
 
   double getLastWeekIncome() {
     final now = DateTime.now();
-    final startOfThisWeek = now.subtract(Duration(days: now.weekday - 1));
+    final startOfThisWeek = _startOfWeek(now);
     final startOfLastWeek = startOfThisWeek.subtract(Duration(days: 7));
 
     return _transactions
@@ -71,20 +71,36 @@ class TransactionProvider extends ChangeNotifier{
 
   List<double> getWeeklyExpenses() {
     final now = DateTime.now();
-    final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
+
+    // Start of week (Monday)
+    final startOfWeek = DateTime(
+      now.year,
+      now.month,
+      now.day - (now.weekday - 1),
+    );
+
+    // End of week (Sunday)
+    final endOfWeek = startOfWeek.add(Duration(days: 7));
 
     List<double> weekly = List.filled(7, 0);
 
     for (var tx in _transactions) {
       if (tx.type == 'expense') {
-        if (tx.date.isAfter(startOfWeek)) {
-          int index = tx.date.weekday - 1; // Mon=0 ... Sun=6
+        if (!tx.date.isBefore(startOfWeek) &&
+            tx.date.isBefore(endOfWeek)) {
+
+          int index = tx.date.weekday - 1;
           weekly[index] += tx.amount;
         }
       }
     }
 
     return weekly;
+  }
+  // utility for start of the week
+  DateTime _startOfWeek(DateTime date) {
+    final d = DateTime(date.year, date.month, date.day); // removes time
+    return d.subtract(Duration(days: d.weekday - 1));
   }
 
   void loadTransactions(){

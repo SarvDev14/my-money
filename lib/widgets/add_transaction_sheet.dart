@@ -47,7 +47,7 @@ class _AddTransactionSheetState extends State<AddTransactionSheet> {
         top: 16,
       ),
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 233, 255, 239),
+        color: const Color.fromARGB(255, 233, 248, 255),
         borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
       ),
       child: SingleChildScrollView(

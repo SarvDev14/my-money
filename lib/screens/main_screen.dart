@@ -6,6 +6,10 @@ import 'transactions_screen.dart';
 import 'insights_screen.dart';
 
 class MainScreen extends StatefulWidget {
+  static void navigateToTab(BuildContext context, int index) {
+    final state = context.findAncestorStateOfType<_MainScreenState>();
+    state?._onItemTapped(index);
+  }
   @override
   _MainScreenState createState() => _MainScreenState();
 }
@@ -20,6 +24,8 @@ class _MainScreenState extends State<MainScreen> {
     
   ];
 
+  
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -29,9 +35,27 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _screens[_selectedIndex],
+      backgroundColor: Colors.grey.shade100,
+      body: Stack(
+        children: [
 
-      bottomNavigationBar: BottomNavBar(onItemTapped: _onItemTapped,)
+          // 🔹 Main Screen
+          Positioned.fill(
+            child: _screens[_selectedIndex],
+          ),
+
+          // 🔹 Floating Bottom Nav
+          Positioned(
+            bottom: 2,
+            left: 16,
+            right: 16,
+            child: BottomNavBar(
+              selectedIndex: _selectedIndex,
+              onItemTapped: _onItemTapped,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

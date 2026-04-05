@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_money/widgets/transaction_detail_sheet.dart';
 import 'package:provider/provider.dart';
 import '../models/transaction_model.dart';
 import '../providers/transaction_provider.dart';
@@ -52,7 +53,15 @@ class _TransactionTileState extends State<TransactionTile> {
           ),
         ),
         child: ListTile(
-          onTap: _showDeleteHint,
+          onTap: () {
+          _showDeleteHint(); // keep your hint
+
+          showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            builder: (_) => TransactionDetailSheet(tx: widget.tx),
+          );
+        },
           leading: CircleAvatar(
             backgroundColor:
                 Colors.grey.shade300,
