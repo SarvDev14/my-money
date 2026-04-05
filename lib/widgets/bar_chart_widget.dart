@@ -13,8 +13,11 @@ class WeeklyBarChart extends StatelessWidget {
         borderData: FlBorderData(show: false),
         gridData: FlGridData(show: false),
         titlesData: FlTitlesData(
+          topTitles: AxisTitles(
+            sideTitles: SideTitles(showTitles: false),
+          ),
           leftTitles: AxisTitles(
-            sideTitles: SideTitles(showTitles: true),
+            sideTitles: SideTitles(showTitles: false),
           ),
           bottomTitles: AxisTitles(
             sideTitles: SideTitles(

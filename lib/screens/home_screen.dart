@@ -3,6 +3,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:my_money/providers/transaction_provider.dart';
 import 'package:my_money/widgets/add_transaction_sheet.dart';
 import 'package:my_money/widgets/balance_card.dart';
+import 'package:my_money/widgets/bar_chart_widget.dart';
 import 'package:my_money/widgets/transaction_tile.dart';
 import 'package:provider/provider.dart';
 
@@ -33,47 +34,79 @@ class _HomeScreenState extends State<HomeScreen> {
     double balance = income - expense;
 
     final recentTx = provider.transactions.reversed.take(3).toList();
+
+    final weeklyData = provider.getWeeklyExpenses();
+
     return Scaffold(
 
       
 
       appBar: AppBar(backgroundColor: Colors.white60,title: Text("My Money", style: TextStyle(fontWeight: FontWeight.bold),),),
       
-      body: Padding(
-      padding: EdgeInsets.all(16),
-      child: Column(
-        children: [
-          BalanceCard(
-            balance: balance,
-            income: income,
-            expense: expense,
-          ),
-
-          SizedBox(height: 20),
-
-          Card(
-            color: Colors.black,
-            child: ListTile(
-              title: Text("Recent Transactions", style: TextStyle(color: Colors.white),),
-              trailing: Icon(Icons.trending_up, color: Colors.white,),
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Padding(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          children: [
+            BalanceCard(
+              balance: balance,
+              income: income,
+              expense: expense,
             ),
-          ),
-
-          Expanded(
-            child: ListView.builder(
+        
+            SizedBox(height: 20),
+        
+            Container(
+              height: 200,
+              padding: EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Weekly Spending",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 10),
+                  SizedBox(
+                    height: 140,
+                    child: WeeklyBarChart(weeklyData: weeklyData),
+                  )
+                ],
+              ),
+            ),
+        
+            SizedBox(height: 20),
+        
+            Card(
+              color: Colors.black,
+              child: ListTile(
+                title: Text("Recent Transactions", style: TextStyle(color: Colors.white),),
+                trailing: Icon(Icons.trending_up, color: Colors.white,),
+              ),
+            ),
+        
+            ListView.builder(
+              shrinkWrap: true, 
+              physics: NeverScrollableScrollPhysics(), 
               itemCount: recentTx.length,
               itemBuilder: (context, index) {
                 final tx = recentTx[index];
-
                 return TransactionTile(tx: tx, index: index);
               },
+            )
+          ],
+        ),
             ),
-          ),
-        ],
       ),
-    ),
 
         floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.blue.shade100,
+          foregroundColor: Colors.black,
           onPressed: (){
             showModalBottomSheet(context: context, builder: (_)=> AddTransactionSheet());
           }, 
